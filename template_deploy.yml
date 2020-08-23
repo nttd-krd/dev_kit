@@ -62,7 +62,7 @@ Resources:
             Action: "sts:AssumeRole"
 
       Policies:
-        - PolicyName: !Sub ${LambdaFunctionName}-DynamoDB
+        - PolicyName: !Sub ${lambda_handler}-DynamoDB
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -73,7 +73,7 @@ Resources:
                   - "dynamodb:PutItem"
                   - "dynamodb:UpdateItem"
                 Resource: !GetAtt DynamoDBTestTable.Arn
-        - PolicyName: !Sub ${LambdaFunctionName}-CloudWatch
+        - PolicyName: !Sub ${lambda_handler}-CloudWatch
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
