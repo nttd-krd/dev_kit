@@ -1,26 +1,19 @@
 version: 0.2
 
 phases:
-  install:
-    commands:
-      - echo "install > commands"
-    finally:
-      - echo "install > finally"
-  pre_build:
-    commands:
-      - echo "pre_build > commands"
-    finally:
-      - echo "pre_build > finally"
   build:
     commands:
-      - echo "build > commands"
-    finally:
-      - echo "build > finally"
+      - CurrentVersion=$(echo $(aws lambda get-alias --function-name HelloWorld --name dev | grep FunctionVersion | tail -1 |tr -cd "[0-9]"))
   post_build:
     commands:
-      - echo "post_build > commands"
-    finally:
-      - echo "post_build > finally"
+      - ls
+      - aws lambda publish-version --function-name HelloWorld
+      - TargetVersion=$(echo $(aws lambda list-versions-by-function --function-name HelloWorld | grep Version | tail -1 | tr -cd "[0-9]"))
+      - echo $CurrentVersion
+      - echo $TargetVersion
+      - sed -i -e "s/{{CurrentVersion}}/$CurrentVersion/g" appspec.yml
+      - sed -i -e "s/{{TargetVersion}}/$TargetVersion/g" appspec.yml
+
 artifacts:
   files:
-    - ./**/*
+    - "**/*"
