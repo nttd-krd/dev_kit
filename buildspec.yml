@@ -1,5 +1,11 @@
 version: 0.2
 
+EnvironmentVariables:
+          - Name: PACKAGED_TEMPLATE_FILE_PATH
+            Value: !Ref PackagedTemplateFilePath
+          - Name: S3_BUCKET
+            Value: !Ref ArtifactStoreBucket
+
 phases:
   build:
     commands:
